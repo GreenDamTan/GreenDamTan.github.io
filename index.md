@@ -11,6 +11,8 @@
 
 # 目录
 ## 2024
+### 202401
+[启用NVIDIA非专业卡(游戏卡、NVS等)的TCC模式](2024/01/280637_force_tcc_in_geforce_card/index.md)
 ### 202404
 [修复NVIDA vGPU 17.0(即550.54.10)在6.8内核(PVE8.2)的问题](2024/04/300745_fix_vgpu_grid17-0_in_kernel_6-8/index.md)
 ### 202406
