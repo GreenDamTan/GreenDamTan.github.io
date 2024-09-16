@@ -11,6 +11,8 @@
 
 # 目录
 ## 2024
+### 202404
+[修复NVIDA vGPU 17.0(即550.54.10)在6.8内核(PVE8.2)的问题](2024/04/300745_fix_vgpu_grid17-0_in_kernel_6-8/index.md)
 ### 202406
 [使用杂种vGPU驱动保留宿主机CUDA能力](2024/06/021256_use_merge_vgpu_driver_in_pve/index.md)
 
