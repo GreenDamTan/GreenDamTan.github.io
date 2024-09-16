@@ -11,6 +11,8 @@
 
 # 目录
 ## 2023
+### 202301
+[在ProxmoxVE上使用bcache让SSD加速机械硬盘](2023/01/290823_bcache_in_proxmox_ve/index.md)
 ### 202308
 [使用BepInEx修改unity3d游戏(1)——以SaintGearForce为例初识BepInEx](2023/08/250354_BepInEx_unity3d_SaintGearForce/index.md) 
 ### 202309
