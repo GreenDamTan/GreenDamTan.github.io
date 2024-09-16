@@ -12,6 +12,8 @@
 # 目录
 ## 2024
 ### 202409
-[飞牛私有云fnOS公测版强塞nvidia驱动(1)](2024/09/120333_insert_nvidia_driver_in_fnOS_1/index.md)
+[飞牛私有云 fnOS公测版遇到的问题(1)](2024/09/010111_wrong_with_fnOS_beta_1/index.md)
+
+[飞牛私有云 fnOS公测版强塞nvidia驱动(1)](2024/09/120333_insert_nvidia_driver_in_fnOS_1/index.md)
 
 [飞牛私有云fnOS公测版使用vGPU-Grid驱动](2024/09/152251_use_nvidia_vgpu_grid_driver_in_fnOS/index.md)
