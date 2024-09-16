@@ -10,6 +10,9 @@
 如果要搜索相关专题请善用github搜索功能  
 
 # 目录
+## 2022
+### 202212
+[来自民间的VGPU授权fastapi-dls](2022/12/291214_vGPU_fastapi-dls/index.md)
 ## 2023
 ### 202301
 [在ProxmoxVE上使用bcache让SSD加速机械硬盘](2023/01/290823_bcache_in_proxmox_ve/index.md)
