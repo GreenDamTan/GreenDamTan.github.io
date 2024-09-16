@@ -11,6 +11,8 @@
 
 # 目录
 ## 2022
+### 202210
+[在Proxmox中直通P106-090不认卡的解决方案(估计也适用于其他矿卡)](2022/10/300950_nvidia_mining_card_driver/index.md)
 ### 202212
 [来自民间的VGPU授权fastapi-dls](2022/12/291214_vGPU_fastapi-dls/index.md)
 ## 2023
