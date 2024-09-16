@@ -11,6 +11,8 @@
 
 # 目录
 ## 2022
+### 202209
+[在群晖中使用docker跑ProxmoxVE](2022/09/050940_dockerPVE_in_ds918/index.md)
 ### 202210
 [在Proxmox中直通P106-090不认卡的解决方案(估计也适用于其他矿卡)](2022/10/300950_nvidia_mining_card_driver/index.md)
 ### 202212
