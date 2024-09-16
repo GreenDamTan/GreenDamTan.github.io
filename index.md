@@ -10,6 +10,9 @@
 如果要搜索相关专题请善用github搜索功能  
 
 # 目录
+## 2023
+### 202309
+[远程调用GPU——Juice前瞻](2023/09/110347_remote_GPU_Juice/index.md)
 ## 2024
 ### 202401
 [启用NVIDIA非专业卡(游戏卡、NVS等)的TCC模式](2024/01/280637_force_tcc_in_geforce_card/index.md)
