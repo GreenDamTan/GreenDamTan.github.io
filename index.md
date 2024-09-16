@@ -13,6 +13,8 @@
 ## 2024
 ### 202406
 [非正经显卡在ff14 7.0跑分程序(ffxiv-dawntrail-bench_v11)的表现](2024/06/091934_gpu_in_ff14_7/index.md)
+
+[构建含有ollvm功能的LLVM(clang-cl)供Microsoft Visual Studio 2022使用](2024/06/151137_ollvm_in_vs2022/index.md)
 ### 202409
 [飞牛私有云 fnOS公测版遇到的问题(1)](2024/09/010111_wrong_with_fnOS_beta_1/index.md)
 
