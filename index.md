@@ -12,6 +12,8 @@
 # 目录
 ## 2024
 ### 202406
+[使用杂种vGPU驱动保留宿主机CUDA能力](2024/06/021256_use_merge_vgpu_driver_in_pve/index.md)
+
 [非正经显卡在ff14 7.0跑分程序(ffxiv-dawntrail-bench_v11)的表现](2024/06/091934_gpu_in_ff14_7/index.md)
 
 [构建含有ollvm功能的LLVM(clang-cl)供Microsoft Visual Studio 2022使用](2024/06/151137_ollvm_in_vs2022/index.md)
