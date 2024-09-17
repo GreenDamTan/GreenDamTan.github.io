@@ -11,6 +11,8 @@
 
 # 目录
 ## 2022
+### 202207
+[proxmox虚拟机使用nat网络](2022/07/271113_proxmox_using_nat/index.md)
 ### 202209
 [在群晖中使用docker跑ProxmoxVE](2022/09/050940_dockerPVE_in_ds918/index.md)
 ### 202210
