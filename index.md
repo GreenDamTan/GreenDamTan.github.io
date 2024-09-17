@@ -24,6 +24,8 @@
 ## 2023
 ### 202301
 [在ProxmoxVE上使用bcache让SSD加速机械硬盘](2023/01/290823_bcache_in_proxmox_ve/index.md)
+### 202304
+[在Proxmox VE 7.4 中开启NVIDIA P106显卡虚拟化(vGPU)](2023/04/160252_vGPU_in_Proxmox_VE_7-4_P106/index.md)
 ### 202308
 [使用BepInEx修改unity3d游戏(1)——以SaintGearForce为例初识BepInEx](2023/08/250354_BepInEx_unity3d_SaintGearForce/index.md) 
 ### 202309
