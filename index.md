@@ -15,6 +15,8 @@
 [proxmox中使用ax210连接无线网络](2022/07/270840_proxmox_using_wlan/index.md)
 
 [proxmox虚拟机使用nat网络](2022/07/271113_proxmox_using_nat/index.md)
+### 202208
+[于proxmox的lxc中安装vgpu授权服务(License Server Manager)笔记](2022/08/102000_install_nv_old_lic_in_lxc/index.md)
 ### 202209
 [在群晖中使用docker跑ProxmoxVE](2022/09/050940_dockerPVE_in_ds918/index.md)
 ### 202210
