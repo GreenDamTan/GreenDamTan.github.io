@@ -29,6 +29,7 @@
 # 修改网络配置
 如虚拟机无需网络支持可以不进行本节配置  
 如可接受使用qemu args添加网络也无需按本节进行配置  
+使用qemu args请参考后面的无vmbr联网部分  
 
 ## 已知问题
 按本节操作配置后，在fnOS系统页面不能正常展示网络信息  
@@ -106,9 +107,31 @@ vmbr0就是我们刚刚创建的桥
 如下命令根据实际情况替换  
 192.168.230.128替换为你vmbr0获得的IP  
 /vol1/1000/pve替换为你创建PVE文件夹后复制的原始路径  
+使用shell命令运行  
 ```shell
-docker run -idt --network host --privileged --name pve --add-host pve:192.168.230.128 --hostname pve -v /etc/network/interfaces:/etc/network/interfaces -v /vol1/1000/pve:/var/lib/vz  makedie/proxmox_ve:8.2.4
+docker run -idt --network host --privileged --name pve --add-host pve:192.168.230.128 --hostname pve --device /dev/kvm -v /etc/network/interfaces:/etc/network/interfaces -v /vol1/1000/pve:/var/lib/vz  makedie/proxmox_ve:8.2.4
 ```  
+如果是使用docker-compose的话就是  
+```yaml
+services:
+  pve:
+    image: makedie/proxmox_ve:8.2.4
+    container_name: pve
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+    volumes:
+      - /vol1/1000/pve:/var/lib/vz
+    extra_hosts:
+      - "pve:127.0.0.1"
+    hostname: pve
+    stop_grace_period: 2m
+    privileged: true
+```  
+二者选其一即可
 ## 创建vmbr0配置
 这一节是创建vmbr0配置  
 实际上也只是创建配置罢了  
@@ -135,8 +158,17 @@ docker run -idt --network host --privileged --name pve --add-host pve:192.168.23
 按PVE正常创建虚拟机流程创建即可  
 
 其中初次安装系统时网卡推荐使用E1000以获得最佳兼容性  
-![screenshot-20240920-111846.png](img/screenshot-20240920-111846.png)  
+![screenshot-20240920-111846.png](img/screenshot-20240920-111846.png) 
 
+## 无vmbr联网
+可以使用如下命令修改args
+```shell
+qm set 100 -args '-netdev user,id=n0 -device rtl8139,netdev=n0'
+```  
+使用此方式联网的虚拟机可以正常出站访问，入站访问需要更多额外配置，这里不再赘述  
+其中的rtl8139是兼容性最好的设备，但不是性能最好的，你可以更换为你虚拟机支持的最好设备  
+
+## 系统镜像
 本次案例使用一个winPE作为演示，正常系统也是可以用的  
 ![screenshot-20240920-114134.png](img/screenshot-20240920-114134.png)
 
