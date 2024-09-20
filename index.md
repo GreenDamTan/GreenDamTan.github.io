@@ -49,3 +49,5 @@
 [飞牛私有云 fnOS公测版强塞nvidia驱动(1)](2024/09/120333_insert_nvidia_driver_in_fnOS_1/index.md)
 
 [飞牛私有云fnOS公测版使用vGPU-Grid驱动](2024/09/152251_use_nvidia_vgpu_grid_driver_in_fnOS/index.md)
+
+[在飞牛私有云fnOS公测版中使用docker跑PVE](2024/09/201200_run_docker_pve_in_fnos/index.md)
