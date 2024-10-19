@@ -53,3 +53,5 @@
 [在飞牛私有云fnOS公测版中使用docker跑PVE](2024/09/201200_run_docker_pve_in_fnos/index.md)
 ### 202410
 [在docker PVE中使用nVidia vGPU](2024/10/102050_run_vgpu_with_docker_pve_in_fnos/index.md)
+
+[用qB默认密码，让nas变成矿场](2024/10/171510_qBittorrent_default_pwd_issues/index.md)
