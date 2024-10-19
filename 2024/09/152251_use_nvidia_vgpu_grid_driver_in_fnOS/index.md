@@ -141,6 +141,7 @@ client_configuration_token_16-09-2024-01-09-34.tok
 正常来说单卡机器也不需要nvidia-peermem.ko的  
 使用如下insmod命令即可  
 ```log
+modprobe video
 insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko
@@ -250,6 +251,7 @@ root@fnOS-device:~# nvidia-smi -q |grep License
 ```shell
 cat <<EOF > /usr/games/6.6.38-trim_nvidia/load-nv-grid.sh
 #!/bin/bash
+modprobe video
 insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko
@@ -292,6 +294,34 @@ NVIDIA-Linux-x86_64-550.90.07-grid-vgpu-kvm-patched.run -uninstall
 删除文件  
 再把`/usr/games/6.6.38-trim_nvidia`这个文件夹删掉  
 接着还原被替换的libnvidia-ml.so链接即可
+
+# 关于其他nvidia驱动版本
+## 535.183.06 Grid 16.7
+该版本已经尝试构建  
+```log
+root@fnOS-device:~# nvidia-smi && uname -a
+Sat Oct 17 23:25:55 2024       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.183.06             Driver Version: 535.183.06   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  GRID P4-2Q                     On  | 00000000:02:03.0 Off |                    0 |
+| N/A   N/A    P0              N/A /  N/A |    886MiB /  2048MiB |      9%      Default |
+|                                         |                      |             Disabled |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A     10410      C   /usr/trim/bin/mediasrv                      886MiB |
++---------------------------------------------------------------------------------------+
+Linux NAS-A 6.6.38-trim #34 SMP PREEMPT_DYNAMIC Wed Sep 25 16:22:17 CST 2024 x86_64 GNU/Linux
+```
 
 # 结束语
 这个fnOS一天三更新，不大适合自己折腾  
