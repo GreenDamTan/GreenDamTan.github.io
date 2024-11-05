@@ -116,7 +116,44 @@ rm /usr/trim/lib/{libnvidia-ml.so,libnvidia-ml.so.1}
 ln -s /usr/lib/x86_64-linux-gnu/libnvidia-ml.so /usr/trim/lib/libnvidia-ml.so
 ln -s /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/trim/lib/libnvidia-ml.so.1
 ```  
-如果不替换也可以用，但是fnOS的资源监控不能显示  
+如果不替换libnvidia-ml也可以用，但是fnOS的资源监控不能显示
+
+高版本下mediasrv，需要自行替换或者是放置相关库  
+至于什么算高版本那就不知道了，至少version 0.8.16是这样  
+否则可以开启GPU加速但是会报错，报错文案形如  
+```log
+root@fnOS-device:/usr/trim/lib/mediasrv# /usr/trim/bin/mediasrv -o /usr/trim/logs/mediasrv.log -a /var/run/mediasrv.socket
+[ne]max connections: 300 (75 per worker), workers: 4
+[ne]socket timeout: 60s
+[hevc @ 0x563eed594000] Invalid setup for format vaapi: does not match the type of the provided device context.
+[hevc @ 0x563eed594000] decoder->cvdl->cuvidCreateDecoder(&decoder->decoder, params) failed -> CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+[hevc @ 0x563eed594000] Failed setup for format cuda: hwaccel initialisation returned error.
+[hevc @ 0x563eed594400] Could not find ref with POC 0
+[hevc @ 0x563eed594800] Could not find ref with POC 0
+[hevc @ 0x563eed594c00] Could not find ref with POC 0
+[hevc @ 0x563eed595000] Could not find ref with POC 0
+[hevc @ 0x563eed595400] Could not find ref with POC 0
+[hevc @ 0x563eed595800] Could not find ref with POC 0
+[hevc @ 0x563eed595c00] Could not find ref with POC 0
+[hevc @ 0x563eedbb2000] Could not find ref with POC 0
+```  
+报错的文案令人迷惑，但是这个在替换相关库之后就能修复  
+以下命令执行如果出现rm失败的不用理会，继续执行剩余命令即可  
+```shell
+rm /usr/trim/lib/mediasrv/{libcuda.so,libcuda.so.1}
+ln -s /usr/lib/x86_64-linux-gnu/libcuda.so /usr/trim/lib/mediasrv/libcuda.so
+ln -s /usr/lib/x86_64-linux-gnu/libcuda.so /usr/trim/lib/mediasrv/libcuda.so.1
+rm /usr/trim/lib/mediasrv/{libnvcuvid.so,libnvcuvid.so.1}
+ln -s /usr/lib/x86_64-linux-gnu/libnvcuvid.so /usr/trim/lib/mediasrv/libnvcuvid.so
+ln -s /usr/lib/x86_64-linux-gnu/libnvcuvid.so /usr/trim/lib/mediasrv/libnvcuvid.so.1
+rm /usr/trim/lib/mediasrv/{libnvidia-encode.so,libnvidia-encode.so.1}
+ln -s /usr/lib/x86_64-linux-gnu/libnvidia-encode.so /usr/trim/lib/mediasrv/libnvidia-encode.so
+ln -s /usr/lib/x86_64-linux-gnu/libnvidia-encode.so /usr/trim/lib/mediasrv/libnvidia-encode.so.1
+```
+随后重启mediasrv服务即可正常使用nvidia编解码功能  
+```shell
+systemctl restart mediasrv.service
+```
 ## 下载vGPU授权
 这个跟正常的Grid驱动下载授权是一样的  
 所以这里我们不说授权怎么搭，建议参考其他文章  
