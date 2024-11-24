@@ -55,3 +55,5 @@
 [在docker PVE中使用nVidia vGPU](2024/10/102050_run_vgpu_with_docker_pve_in_fnos/index.md)
 
 [用qB默认密码，让nas变成矿场](2024/10/171510_qBittorrent_default_pwd_issues/index.md)
+### 202411
+[在fnOS中开启内存压缩](2024/11/241946_fnos_enable_zram/index.md)
