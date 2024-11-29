@@ -179,6 +179,8 @@ client_configuration_token_16-09-2024-01-09-34.tok
 使用如下insmod命令即可  
 ```log
 modprobe video
+modprobe drm
+modprobe drm_kms_helper
 insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko
@@ -190,6 +192,9 @@ nvidia-smi -pm 1
 
 正常来说ssh回显应该是与如下基本一致  
 ```log
+root@fnOS-device:~# modprobe video
+root@fnOS-device:~# modprobe drm
+root@fnOS-device:~# modprobe drm_kms_helper
 root@fnOS-device:~# insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 root@fnOS-device:~# insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 root@fnOS-device:~# insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko
@@ -289,6 +294,8 @@ root@fnOS-device:~# nvidia-smi -q |grep License
 cat <<EOF > /usr/games/6.6.38-trim_nvidia/load-nv-grid.sh
 #!/bin/bash
 modprobe video
+modprobe drm
+modprobe drm_kms_helper
 insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko

@@ -327,6 +327,9 @@ Thu Oct 11 00:16:54 2024
 ```log
 root@fnOS:~# cat /usr/games/6.6.38-trim_nvidia/load-nv-grid.sh
 #!/bin/bash
+modprobe video
+modprobe drm
+modprobe drm_kms_helper
 insmod /usr/games/6.6.38-trim_nvidia/nvidia.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-uvm.ko
 insmod /usr/games/6.6.38-trim_nvidia/nvidia-modeset.ko
