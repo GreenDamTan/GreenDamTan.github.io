@@ -57,3 +57,5 @@
 [用qB默认密码，让nas变成矿场](2024/10/171510_qBittorrent_default_pwd_issues/index.md)
 ### 202411
 [在fnOS中开启内存压缩](2024/11/241946_fnos_enable_zram/index.md)
+### 202412
+[在fnos存储空间上开启zstd透明压缩](2024/12/300031_fnos_enable_compress/index.md)
