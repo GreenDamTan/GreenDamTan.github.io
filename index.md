@@ -59,3 +59,7 @@
 [在fnOS中开启内存压缩](2024/11/241946_fnos_enable_zram/index.md)
 ### 202412
 [在fnos存储空间上开启zstd透明压缩](2024/12/300031_fnos_enable_compress/index.md)
+
+## 2025
+### 202501
+[借鸡生蛋，使用fnos的openvswitch打通dockerPVE网络](2025/01/022315_fnos_ovs_with_docker_pve/index.md)
