@@ -63,3 +63,5 @@
 ## 2025
 ### 202501
 [借鸡生蛋，使用fnos的openvswitch打通dockerPVE网络](2025/01/022315_fnos_ovs_with_docker_pve/index.md)
+
+[在飞牛虚拟机上使用nvidia vGPU](2025/01/221156_fnos_trim_vm_vgpu_libvirt/index.md)
