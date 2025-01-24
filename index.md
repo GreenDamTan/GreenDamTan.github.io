@@ -67,3 +67,5 @@
 [在飞牛虚拟机上使用nvidia vGPU](2025/01/221156_fnos_trim_vm_vgpu_libvirt/index.md)
 
 [让飞牛OS支持Tesla P4编解码](2025/01/221925_fnos_patch_for_3d_contorller/index.md)
+
+[飞牛虚拟机让Intel N100核显SR-IOV大败而归](2025/01/232229_fnos_trim_vm_n100_sriov/index.md)
