@@ -18,10 +18,11 @@
 # 修改点
 以fnOS 0.8.36版本为例  
 以下几处修改就是强行将判断VGA设备改为3D控制器设备  
-至于为什么300改为302，是00 30改为02 30，这就涉及一个大小端问题，写了估计也么人看  
+至于为什么300改为302，是00 30改为02 03，这就涉及一个大小端问题，写了估计也么人看  
 改完之后只认3D控制器，反而会不认VGA设备  
 改CMP跳转不是不行，但我就是懒，你们有兴趣的可以自己加油  
 ## resmon_service
+打开文件 /usr/trim/bin/resmon_service  
 将如下部分，进行patch  
 此处影响资源监控  
 ```asm
@@ -44,13 +45,14 @@ systemctl restart resmon_service.service
 ```
 
 ## sysinfo_service
+打开文件/usr/trim/bin/sysinfo_service  
 将如下部分，进行patch  
 此处影响，系统设置-硬件信息-GPU
 ```asm
 .text:0000000000058025                 cmp     word ptr [rbx+18h], 300h
 ```
 将300修改为302  
-![(img/20250122193657.png)
+![](img/20250122193657.png)
 
 对应的Hex
 ```hex
@@ -66,6 +68,7 @@ systemctl restart sysinfo_service.service
 ```
 
 ## mediasrv
+打开文件/usr/trim/bin/mediasrv  
 将如下部分，进行patch  
 此处影响，飞牛影视-设置-启用GPU加速转码  
 ```asm
