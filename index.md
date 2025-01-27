@@ -71,3 +71,6 @@
 [飞牛虚拟机让Intel N100核显SR-IOV大败而归](2025/01/232229_fnos_trim_vm_n100_sriov/index.md)
 
 [在飞牛虚拟机上使用Intel GVT-g共享显卡](2025/01/241146_fnos_trim_vm_intel_HD620_gvtg/index.md)
+
+### 202502
+[如何给NVIDIA的vgpu-kvm驱动打补丁强开vGPU](2025/01/271517_how_to_patch_nvidia_vgpu_driver/index.md)
