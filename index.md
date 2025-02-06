@@ -74,3 +74,5 @@
 
 ### 202502
 [如何给NVIDIA的vgpu-kvm驱动打补丁强开vGPU](2025/01/271517_how_to_patch_nvidia_vgpu_driver/index.md)
+
+[在飞牛OS使用libnvidia-container让docker容器支持NVIDIA GPU加速](2025/02/061645_fnos-libnvidia-container/index.md)
