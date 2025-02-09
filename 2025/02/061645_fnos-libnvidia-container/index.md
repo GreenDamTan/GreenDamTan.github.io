@@ -144,6 +144,60 @@ root@fnOS-device:~# cat /etc/docker/daemon.json
     }
 }
 ```
+# 检查处理驱动问题
+如果驱动是使用飞牛应用商店那个有问题的驱动，需要自行修复库链接  
+已知两个问题会有这样的问题 "libcuda.so.1.1", "libnvidia-ml.so.1"  
+否则会出现图中这种情况，该问题由飞牛商店驱动缺陷所致  
+![20250209144746.png](img/20250209144746.png)  
+如果经过检查，以下两个库不是以链接呈现  
+```log
+root@Nas:~# ls -lh /usr/lib/x86_64-linux-gnu/libnvidia-ml.so*
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03
+```
+```log
+root@Nas:~# ls -lh /usr/lib/x86_64-linux-gnu/libcuda.so*
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so.1
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03
+```
+而是如上所示，则需要自行修复  
+```log
+root@Nas:~# mv /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1.bak
+root@Nas:~# mv /usr/lib/x86_64-linux-gnu/libnvidia-ml.so /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.bak
+root@Nas:~# ln -sf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+root@Nas:~# ln -sf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so
+root@Nas:~# ls -lh /usr/lib/x86_64-linux-gnu/libnvidia-ml.so*
+```
+```log
+root@Nas:~# mv /usr/lib/x86_64-linux-gnu/libcuda.so /usr/lib/x86_64-linux-gnu/libcuda.so.bak
+root@Nas:~# mv /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1.bak
+root@Nas:~# ln -sf /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03 /usr/lib/x86_64-linux-gnu/libcuda.so
+root@Nas:~# ln -sf /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03 /usr/lib/x86_64-linux-gnu/libcuda.so.1
+```
+以确保这两个地方是链接而不是文件  
+```shell
+root@Nas:~# ls -lh /usr/lib/x86_64-linux-gnu/libnvidia-ml.so*
+lrwxrwxrwx 1 root root   51 Feb  9 14:35 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so -> /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03
+lrwxrwxrwx 1 root root   51 Feb  9 14:35 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 -> /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1.bak
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03
+-rwxr-xr-x 1 root root 2.1M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.bak
+```  
+```shell
+root@Nas:~# ls -lh /usr/lib/x86_64-linux-gnu/libcuda.so*
+lrwxrwxrwx 1 root root  46 Feb  9 14:39 /usr/lib/x86_64-linux-gnu/libcuda.so -> /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03
+lrwxrwxrwx 1 root root  46 Feb  9 14:39 /usr/lib/x86_64-linux-gnu/libcuda.so.1 -> /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so.1.bak
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so.560.28.03
+-rwxr-xr-x 1 root root 34M Sep  6 14:48 /usr/lib/x86_64-linux-gnu/libcuda.so.bak
+```  
+才能正常在docker使用飞牛的官方驱动  
+![20250209144656.png](img/20250209144656.png)  
+
+如在使用中发现其他库也有问题，可能也需进行上述的处理
+
 # 重启飞牛docker服务
 打开飞牛的docker，点一下docker服务旁边的开关，关闭docker服务  
 ![20250206165401.png](img/20250206165401.png)  
