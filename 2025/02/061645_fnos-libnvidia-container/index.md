@@ -196,7 +196,42 @@ lrwxrwxrwx 1 root root  46 Feb  9 14:39 /usr/lib/x86_64-linux-gnu/libcuda.so.1 -
 才能正常在docker使用飞牛的官方驱动  
 ![20250209144656.png](img/20250209144656.png)  
 
-如在使用中发现其他库也有问题，可能也需进行上述的处理
+如在使用中发现其他库也有问题，可能也需进行上述的处理  
+目前已知有如下库可能需要修正，请根据你的实际需要选择性执行  
+```shell
+ ln -sf /lib/x86_64-linux-gnu/libGLESv2_nvidia.so.560.28.03 /lib/x86_64-linux-gnu/libGLESv2_nvidia.so.2
+ ln -sf /lib/x86_64-linux-gnu/libcudadebugger.so.560.28.03 /lib/x86_64-linux-gnu/libcudadebugger.so.1
+ ln -sf /lib/x86_64-linux-gnu/libEGL_nvidia.so.560.28.03 /lib/x86_64-linux-gnu/libEGL_nvidia.so.0
+ ln -sf /lib/x86_64-linux-gnu/libGLESv1_CM_nvidia.so.560.28.03 /lib/x86_64-linux-gnu/libGLESv1_CM_nvidia.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-fbc.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-fbc.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-fbc.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-fbc.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-cfg.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-cfg.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-cfg.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-cfg.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-ml.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-ml.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-ml.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvcuvid.so.560.28.03 /lib/x86_64-linux-gnu/libnvcuvid.so
+ ln -sf /lib/x86_64-linux-gnu/libnvcuvid.so.560.28.03 /lib/x86_64-linux-gnu/libnvcuvid.so.1
+ ln -sf /lib/x86_64-linux-gnu/libcuda.so.560.28.03 /lib/x86_64-linux-gnu/libcuda.so
+ ln -sf /lib/x86_64-linux-gnu/libcuda.so.560.28.03 /lib/x86_64-linux-gnu/libcuda.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvoptix.so.560.28.03 /lib/x86_64-linux-gnu/libnvoptix.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-opencl.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-opencl.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-allocator.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-allocator.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-allocator.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-allocator.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-egl-wayland.so.1.1.13 /lib/x86_64-linux-gnu/libnvidia-egl-wayland.so.1
+ ln -sf /lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/x86_64-linux-gnu/libOpenCL.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-ngx.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-ngx.so.1
+ ln -sf /lib/x86_64-linux-gnu/libGLX_nvidia.so.560.28.03 /lib/x86_64-linux-gnu/libGLX_nvidia.so.0
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-opticalflow.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-opticalflow.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-opticalflow.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-opticalflow.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-egl-gbm.so.1.1.1 /lib/x86_64-linux-gnu/libnvidia-egl-gbm.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-encode.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-encode.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-encode.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-encode.so.1
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-nvvm.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-nvvm.so
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-nvvm.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-nvvm.so.4
+ ln -sf /lib/x86_64-linux-gnu/libnvidia-vksc-core.so.560.28.03 /lib/x86_64-linux-gnu/libnvidia-vksc-core.so.1
+```
 
 # 重启飞牛docker服务
 打开飞牛的docker，点一下docker服务旁边的开关，关闭docker服务  
