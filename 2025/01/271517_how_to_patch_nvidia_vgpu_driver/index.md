@@ -983,6 +983,21 @@ Self-extractible archive "NVIDIA-Linux-x86_64-550.144.02-vgpu-kvm-custom.run" su
 随后就会生成处打好补丁的`NVIDIA-Linux-x86_64-550.144.02-vgpu-kvm-custom.run`  
 随后按正常驱动方法安装即可，记得加参数不要忘记了
 
+# 其他版本
+## 18.0 570.124.03
+[NVIDIA_570.124.03_vGPU.patch](https://github.com/GreenDamTan/GreenDamTan.github.io/raw/refs/heads/dev/2025/01/271517_how_to_patch_nvidia_vgpu_driver/NVIDIA_570.124.03_vGPU.patch)
+
+```shell
+NVIDIA-Linux-x86_64-570.124.03-vgpu-kvm.run --apply-patch NVIDIA_570.124.03_vGPU.patch
+```  
+
+注意这个版本有两个结构体发生了变更，需要修改那个unlock_rs.so才能正常覆盖配置  
+NVA081_CTRL_CMD_VGPU_CONFIG_GET_VGPU_TYPE_INFO  
+[NV0080_CTRL_CMD_GPU_GET_VIRTUALIZATION_MODE](https://github.com/NVIDIA/open-gpu-kernel-modules/commit/3084c044530e0943e3cca1dba58accb1134685dd#diff-359da370f604352bc57a0a31d6f70ad0d5ddb50d3a4690c027588b63a15daf79)
+
+功能验证如图所示  
+![20250306184431.png](img/20250306184431.png)
+
 # 结束语
 这回是估计是最后折腾这个vGPU了  
 新卡看看什么时候有钱买，旧卡感觉也就是这样了  
