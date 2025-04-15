@@ -12,6 +12,8 @@
 # 目录
 ## 2025
 ### 202504
+[在安卓手机上挂载NAS的SMB共享](2025/04/15112129_mount_cifs_smb_in_android/index.md)
+
 [在linux 6.12版本(6.14.0-1-pve内核也能用)内核中使用vGPU Grid 17.2 (550.144.02)](2025/04/05204508_vgpu_17.5_550.144.02_in_linux_kernel_6.12_also_6.14.0-1-pve/index.md)
 ### 202502
 [如何给NVIDIA的vgpu-kvm驱动打补丁强开vGPU](2025/01/271517_how_to_patch_nvidia_vgpu_driver/index.md)
