@@ -11,6 +11,8 @@
 
 # 目录
 ## 2025
+### 202505
+[探索在飞牛nas系统手动安装自制应用](2025/05/20200129_fnos_appcenter/index.md)
 ### 202504
 [在安卓手机上挂载NAS的SMB共享](2025/04/15112129_mount_cifs_smb_in_android/index.md)
 
