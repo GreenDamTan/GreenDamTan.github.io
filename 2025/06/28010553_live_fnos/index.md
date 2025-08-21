@@ -151,6 +151,7 @@ root@fnOS-device:/# echo "root:root"|chpasswd
 root@fnOS-device:/# echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
 root@fnOS-device:/# echo "listen_addresses = '*'" >> /etc/postgresql/15/main/postgresql.conf
 root@fnOS-device:/# rm /etc/fstab
+root@fnOS-device:/# systemctl disable docker
 root@fnOS-device:/# exit
 ```
 
@@ -268,7 +269,7 @@ EOF
 因为EFI目前没有分辨率问题，不需要指定分辨率  
 但如果你后续觉得分辨率太大不好看也可以自行调整  
 ```shell
-cat <<'EOF' > "staging/EFI/BOOT/grub.cfg"
+cat <<'EOF' > "staging/boot/grub/grub.cfg"
 insmod gzio
 insmod iso9660
 insmod fat
@@ -276,23 +277,38 @@ insmod fat
 set timeout=5
 set gfxmode=auto
 set gfxpayload=keep
+set gfxmode=800x600
 insmod all_video
 insmod gfxterm
 
 terminal_output gfxterm
 
+search --file --set=root /live/filesystem.squashfs
+
 menuentry "FNOS Live" {
-    search --no-floppy --set=root --label DEBLIVE   
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
-menuentry "FNOS Live toram" {
-    search --no-floppy --set=root --label DEBLIVE   
+menuentry "FNOS Live Verbose" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    echo 'Loading initrd'
+    initrd ($root)/live/initrd.img-6.12.18-trim
+}
+
+menuentry "FNOS Live toRam" {
+    echo 'Loading vmlinuz'
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    echo 'Loading initrd'
+    initrd ($root)/live/initrd.img-6.12.18-trim
+}
+
+menuentry "FNOS Live toRam Verbose" {
+    echo 'Loading vmlinuz'
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
@@ -300,7 +316,11 @@ EOF
 ```
 
 ```shell
-cp staging/EFI/BOOT/grub.cfg staging/boot/grub/
+cat <<'EOF' > "staging/EFI/BOOT/grub.cfg"
+search --file --set=root /live/filesystem.squashfs
+set prefix=($root)/boot/grub
+source $prefix/x86_64-efi/grub.cfg
+EOF
 ```
 
 ## 创建早期引导配置
@@ -331,10 +351,27 @@ cp /usr/lib/syslinux/modules/bios/* "staging/isolinux/"
 cp -r rootfs/usr/lib/grub/x86_64-efi staging/boot/grub/
 ```
 
+```shell
+cat <<'EOF' > "staging/boot/grub/x86_64-efi/grub.cfg"
+insmod part_acorn
+insmod part_amiga
+insmod part_apple
+insmod part_bsd
+insmod part_dfly
+insmod part_dvh
+insmod part_gpt
+insmod part_msdos
+insmod part_plan
+insmod part_sun
+insmod part_sunpc
+source /boot/grub/grub.cfg
+EOF
+```
+
 
 ## 创建可引导EFI的grub镜像
 因为飞牛系统是64位，所以只需要创建64位的就行了  
-i386-efi是不需要的  
+i386-efi是不需要的
 ```shell
 grub-mkstandalone -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
@@ -353,7 +390,7 @@ grub-mkstandalone -O x86_64-efi \
     mmd -i efiboot.img ::/EFI ::/EFI/BOOT && \
     mcopy -vi efiboot.img \
         "/vol1/1000/workspace/staging/EFI/BOOT/BOOTx64.EFI" \
-        "/vol1/1000/workspace/staging/boot/grub/grub.cfg" \
+        "/vol1/1000/workspace/staging/EFI/BOOT/grub.cfg" \
         ::/EFI/BOOT/
 )
 ```  
@@ -374,7 +411,7 @@ xorriso \
     -iso-level 3 \
     -o "fnos-custom.iso" \
     -full-iso9660-filenames \
-    -volid "DEBLIVE" \
+    -volid "FNOS_LIVE" \
     --mbr-force-bootable -partition_offset 16 \
     -joliet -joliet-long -rational-rock \
     -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
@@ -383,7 +420,6 @@ xorriso \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        --eltorito-catalog isolinux/isolinux.cat \
     -eltorito-alt-boot \
         -e --interval:appended_partition_2:all:: \
         -no-emul-boot \
