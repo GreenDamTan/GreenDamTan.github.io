@@ -138,6 +138,7 @@ chroot rootfs /usr/bin/bash
 ![20250628012528.png](img/20250628012528.png)
 
 依次执行如下命令，下面的命令会打开ssh服务及postgresql访问，并将root密码设置为root  
+创建一个128MB大小的内存盘，用来安装影视应用  
 这里有一个坑，飞牛的trimfs.tgz自带一个错误的fstab，需要删除  
 ```log
 root@fnOS-device:/# sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
@@ -150,8 +151,9 @@ Created symlink /etc/systemd/system/multi-user.target.wants/ssh.service → /lib
 root@fnOS-device:/# echo "root:root"|chpasswd
 root@fnOS-device:/# echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
 root@fnOS-device:/# echo "listen_addresses = '*'" >> /etc/postgresql/15/main/postgresql.conf
-root@fnOS-device:/# rm /etc/fstab
 root@fnOS-device:/# systemctl disable docker
+root@fnOS-device:/# sed -i '/^ExecStart=\/usr\/trim\/bin\/triminit/a ExecStartPost=modprobe scsi_debug inq_product=GreenDamTan dev_size_mb=128' /etc/systemd/system/trim_init.service
+root@fnOS-device:/# rm /etc/fstab
 root@fnOS-device:/# exit
 ```
 
