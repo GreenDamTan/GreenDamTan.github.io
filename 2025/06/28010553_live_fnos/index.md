@@ -82,6 +82,11 @@ live-boot: core filesystems dm-verity devices utils udev blockdev dns.
 ## 解压ISO镜像
 我们使用7z工具，解压飞牛的安装镜像  
 这一步主要是为了提取trimfs.tgz文件作为rootfs  
+以解压fnos-0.9.12-965.iso为例  
+```shell
+7zz x fnos-0.9.12-965.iso -ofniso
+```  
+回显如下  
 ```log
 root@fnOS-device:/vol1/1000/workspace# 7zz x fnos-0.9.12-965.iso -ofniso
 
@@ -140,6 +145,21 @@ chroot rootfs /usr/bin/bash
 依次执行如下命令，下面的命令会打开ssh服务及postgresql访问，并将root密码设置为root  
 创建一个128MB大小的内存盘，用来安装影视应用  
 这里有一个坑，飞牛的trimfs.tgz自带一个错误的fstab，需要删除  
+脚本如下  
+```shell
+sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+sed -i "s/.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+systemctl enable ssh
+echo "root:root"|chpasswd
+echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
+echo "listen_addresses = '*'" >> /etc/postgresql/15/main/postgresql.conf
+systemctl disable docker
+systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+sed -i '/^ExecStart=\/usr\/trim\/bin\/triminit/a ExecStartPost=modprobe scsi_debug inq_product=GreenDamTan dev_size_mb=128' /etc/systemd/system/trim_init.service
+rm /etc/fstab
+exit
+```  
+回显如下  
 ```log
 root@fnOS-device:/# sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 root@fnOS-device:/# sed -i "s/.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
@@ -256,13 +276,25 @@ LABEL linux
   MENU LABEL FNOS Live [BIOS/ISOLINUX]
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
-
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live pcie_aspm=off spectre_v2=off
+  
+LABEL linux
+  MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX]
+  MENU DEFAULT
+  KERNEL /live/vmlinuz-6.12.18-trim
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+  
 LABEL linux toram
   MENU LABEL FNOS Live [BIOS/ISOLINUX] (toram)
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live toram=filesystem.squashfs pcie_aspm=off spectre_v2=off
+  
+LABEL linux toram
+  MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX] (toram)
+  MENU DEFAULT
+  KERNEL /live/vmlinuz-6.12.18-trim
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
 EOF
 ```
 
@@ -289,7 +321,7 @@ search --file --set=root /live/filesystem.squashfs
 
 menuentry "FNOS Live" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
@@ -303,7 +335,7 @@ menuentry "FNOS Live Verbose" {
 
 menuentry "FNOS Live toRam" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
