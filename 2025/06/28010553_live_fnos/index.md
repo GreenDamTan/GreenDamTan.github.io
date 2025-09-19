@@ -154,6 +154,7 @@ echo "root:root"|chpasswd
 echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
 echo "listen_addresses = '*'" >> /etc/postgresql/15/main/postgresql.conf
 systemctl disable docker
+systemctl disable dsmgr
 systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 sed -i '/^ExecStart=\/usr\/trim\/bin\/triminit/a ExecStartPost=modprobe scsi_debug inq_product=GreenDamTan dev_size_mb=128' /etc/systemd/system/trim_init.service
 rm /etc/fstab
@@ -271,30 +272,31 @@ MENU TITLE Boot Menu
 DEFAULT linux
 TIMEOUT 600
 MENU RESOLUTION 640 480
+TIMEOUT 50
 
 LABEL linux
   MENU LABEL FNOS Live [BIOS/ISOLINUX]
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live pci=nomsi pcie_aspm=off spectre_v2=off
   
 LABEL linux
   MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX]
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
   
 LABEL linux toram
   MENU LABEL FNOS Live [BIOS/ISOLINUX] (toram)
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live toram=filesystem.squashfs pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pci=nomsi pcie_aspm=off spectre_v2=off
   
 LABEL linux toram
   MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX] (toram)
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
 EOF
 ```
 
@@ -321,28 +323,28 @@ search --file --set=root /live/filesystem.squashfs
 
 menuentry "FNOS Live" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live pci=nomsi pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live Verbose" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live toRam" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pci=nomsi pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live toRam Verbose" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
