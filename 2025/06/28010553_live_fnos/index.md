@@ -134,6 +134,15 @@ tar -xzvf fniso/trimfs.tgz -C rootfs
 解压完成后，可以去飞牛的文件管理观察一下  
 ![20250628012205.png](img/20250628012205.png)
 
+# 添加驱动及固件
+若有添加驱动或固件，可以提前复制进去  
+这一步不需要可以不做  
+以下是将运行中系统内驱动及固件复制进rootfs的例子  
+```shell
+cp -rnv /lib/modules/`uname -r`/updates rootfs/lib/modules/`uname -r`/updates
+cp -rnv /usr/lib/firmware rootfs/usr/lib/firmware
+```
+
 # 定制rootfs
 执行如下命令，进入chroot中  
 ```shell
@@ -158,6 +167,7 @@ systemctl disable dsmgr
 systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 sed -i '/^ExecStart=\/usr\/trim\/bin\/triminit/a ExecStartPost=modprobe scsi_debug inq_product=GreenDamTan dev_size_mb=128' /etc/systemd/system/trim_init.service
 rm /etc/fstab
+depmod
 exit
 ```  
 回显如下  
