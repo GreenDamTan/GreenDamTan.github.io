@@ -158,12 +158,12 @@ chroot rootfs /usr/bin/bash
 ```shell
 sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 sed -i "s/.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+sed -i "s/.*HandleLidSwitch=.*/HandleLidSwitch=ignore/g" /etc/systemd/logind.conf
 systemctl enable ssh
 echo "root:root"|chpasswd
 echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
 echo "listen_addresses = '*'" >> /etc/postgresql/15/main/postgresql.conf
-systemctl disable docker
-systemctl disable dsmgr
+systemctl disable docker dsmgr apparmor
 systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 sed -i '/^ExecStart=\/usr\/trim\/bin\/triminit/a ExecStartPost=modprobe scsi_debug inq_product=GreenDamTan dev_size_mb=128' /etc/systemd/system/trim_init.service
 rm /etc/fstab
