@@ -11,6 +11,8 @@
 
 # 目录
 ## 2025
+### 202510
+[在RK3588的armbian电视盒子中安装Proxmox社区版pxvirt](2025/10/182220_rk3588_armbian_pxvirt/index.md)
 ### 202509
 [在容器中运行安卓系统](2025/09/03163708_run_redroid_in_docker/index.md)
 ### 202508
