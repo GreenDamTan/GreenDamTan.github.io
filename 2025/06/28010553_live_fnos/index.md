@@ -151,6 +151,16 @@ chroot rootfs /usr/bin/bash
 可以看见此时我们的根目录已经切换到了需要修改的飞牛rootfs中  
 ![20250628012528.png](img/20250628012528.png)
 
+如需要修改网卡命名方式则需要修改`/etc/systemd/network/99-default.link`
+```text
+[Match]
+OriginalName=*
+
+[Link]
+NamePolicy=mac
+MACAddressPolicy=persistent
+```
+
 依次执行如下命令，下面的命令会打开ssh服务及postgresql访问，并将root密码设置为root  
 创建一个128MB大小的内存盘，用来安装影视应用  
 这里有一个坑，飞牛的trimfs.tgz自带一个错误的fstab，需要删除  
