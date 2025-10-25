@@ -339,6 +339,57 @@ echo "192.168.9.2 $(uname -n)" >> /etc/hosts
 
 PVE有一个判断hosts要有一个不是127开头的本主机IPv4的IP才能工作  
 但至于是什么IP不影响PVE单节点启动  
+至于为什么这里节选一下两处代码自行赏析  
+pve-cluster/src/pmxcfs/pmxcfs.c  
+```cpp
+    cfs.nodename = g_strdup(utsname.nodename);
+
+    if (!(cfs.ip = lookup_node_ip(cfs.nodename))) {
+        cfs_critical(
+            "Unable to resolve node name '%s' to a non-loopback IP address - missing entry in"
+            " '/etc/hosts' or DNS?",
+            cfs.nodename
+        );
+        qb_log_fini();
+        exit(-1);
+    }
+```  
+```cpp
+static char *lookup_node_ip(const char *nodename) {
+    char buf[INET6_ADDRSTRLEN];
+    struct addrinfo *ainfo;
+    struct addrinfo ahints = {
+        .ai_flags = AI_V4MAPPED | AI_ALL,
+    };
+    if (getaddrinfo(nodename, NULL, &ahints, &ainfo)) {
+        return NULL;
+    }
+
+    char *res = NULL;
+    for (struct addrinfo *addr = ainfo; addr != NULL; addr = addr->ai_next) {
+        if (addr->ai_family == AF_INET) {
+            struct sockaddr_in *sa = (struct sockaddr_in *)addr->ai_addr;
+            inet_ntop(addr->ai_family, &sa->sin_addr, buf, sizeof(buf));
+            if (strncmp(buf, "127.", 4) != 0) {
+                res = g_strdup(buf);
+                goto ret;
+            }
+        } else if (addr->ai_family == AF_INET6) {
+            struct sockaddr_in6 *sa = (struct sockaddr_in6 *)addr->ai_addr;
+            inet_ntop(addr->ai_family, &sa->sin6_addr, buf, sizeof(buf));
+            if (strcmp(buf, "::1") != 0) {
+                res = g_strdup(buf);
+                goto ret;
+            }
+        }
+    }
+
+ret:
+    freeaddrinfo(ainfo);
+
+    return res;
+}
+```
 
 写完之后hosts是这样的  
 ```text
@@ -420,11 +471,11 @@ root@orangepi5-plus:~# ip link show
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 2: enP4p65s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
-    link/ether 00:e0:4c:68:27:44 brd ff:ff:ff:ff:ff:ff
+    link/ether 00:e0:4c:00:00:01 brd ff:ff:ff:ff:ff:ff
 3: enP2p33s0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN mode DEFAULT group default qlen 1000
-    link/ether 00:e0:4c:68:27:45 brd ff:ff:ff:ff:ff:ff
+    link/ether 00:e0:4c:00:00:02 brd ff:ff:ff:ff:ff:ff
 4: wlP3p49s0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
-    link/ether c8:26:e2:d0:88:ca brd ff:ff:ff:ff:ff:ff
+    link/ether c8:26:e2:00:00:03 brd ff:ff:ff:ff:ff:ff
 ```
 我这个网卡为`enP4p65s0`  
 直接往`/etc/network/interfaces`写就好，免得后面还得自己配  
@@ -474,7 +525,7 @@ iface wlP3p49s0 inet manual
 
 auto vmbr0
 iface vmbr0 inet static
-address 192.168.2.206/24
+address 192.168.2.2/24
 gateway 192.168.2.1
 bridge-ports enP4p65s0
 bridge-stp off
@@ -597,7 +648,7 @@ Do you want to continue? [Y/n]
 记得加端口号8006  
 
 ![20251018231433.png](img/20251018231433.png)  
-32G内存，orangepi5-plus最大应该是只要16吧
+32G内存，orangepi5-plus最大应该是只有16G吧
 
 如果连不上网可以检查一下DNS，有问题就改改  
 ![20251018232518.jpg](img/20251018232518.jpg)
