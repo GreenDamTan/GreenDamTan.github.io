@@ -11,6 +11,9 @@
 
 # 目录
 ## 2025
+### 202511
+[替换飞牛安装ISO镜像rootfs实现系统分区备份转移](2025/11/261034_modify_fnos_iso_rootfs/index.md)
+
 ### 202510
 [给飞牛OS编译it87驱动](2025/10/311513_build_it87_for_fnos_azw_me_mini/index.md)
 
