@@ -11,8 +11,7 @@
 
 # 目录
 ## 2025
-### 202512
-[ARM新品NAS初见，Zettlab-D4的zettos上手速览](2025/12/051744_Zettlab-D4_zettos_1/index.md)
+
 ### 202511
 [替换飞牛安装ISO镜像rootfs实现系统分区备份转移](2025/11/261034_modify_fnos_iso_rootfs/index.md)
 
