@@ -268,15 +268,23 @@ Components: main contrib non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 ```
 
-如上所示，如果我们需要修改源可以直接用下面的命令  
+如上所示，如果我们需要修改为`mirrors.ustc.edu.cn`源可以直接用下面的命令  
 ```shell
 sed -i 's/apt.armbian.com/mirrors.ustc.edu.cn\/armbian/g' /etc/apt/sources.list.d/armbian.sources
 sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
 sed -i 's/security.debian.org/mirrors.ustc.edu.cn\/debian-security/g' /etc/apt/sources.list.d/debian.sources
 ```  
+如果那个慢，可以换`mirror.sjtu.edu.cn`  
+```shell
+sed -i 's/apt.armbian.com/mirror.sjtu.edu.cn\/armbian/g' /etc/apt/sources.list.d/armbian.sources
+sed -i 's/deb.debian.org/mirror.sjtu.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+sed -i 's/security.debian.org/mirror.sjtu.edu.cn\/debian-security/g' /etc/apt/sources.list.d/debian.sources
+```  
+
 有的地方会有http劫持，可以考虑换成https  
 但有的机器armbian默认不带https的ca证书，改了会连不上，要不要改https取决于自己  
 ```shell
+apt install -y ca-certificates apt-transport-https
 sed -i 's/http/https/g' /etc/apt/sources.list.d/armbian.sources /etc/apt/sources.list.d/debian.sources
 ```
 
