@@ -11,6 +11,8 @@
 
 # 目录
 ## 2025
+### 202512
+[替换飞牛ARM版本镜像dtb启动自己的设备](2025/12/311906_change_dtb_in_fnos_arm/index.md)
 
 ### 202511
 [替换飞牛安装ISO镜像rootfs实现系统分区备份转移](2025/11/261034_modify_fnos_iso_rootfs/index.md)
