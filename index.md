@@ -10,6 +10,9 @@
 如果要搜索相关专题请善用github搜索功能  
 
 # 目录
+## 2026
+### 202601
+[使用飞牛OS的fn connect访问家中网络](2026/01/061708_use_fnconnect_proxy/index.md)
 ## 2025
 ### 202512
 [替换飞牛ARM版本镜像dtb启动自己的设备](2025/12/311906_change_dtb_in_fnos_arm/index.md)
