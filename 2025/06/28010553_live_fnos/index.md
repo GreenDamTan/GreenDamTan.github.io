@@ -208,7 +208,7 @@ mkdir -p {staging/{EFI/BOOT,boot/grub/x86_64-efi,isolinux,live},tmp}
 
 并将rootfs打包为squashfs
 ```shell
-mksquashfs rootfs staging/live/filesystem.squashfs -e boot
+mksquashfs rootfs staging/live/filesystem.squashfs -comp zstd -processors `nproc` -no-xattrs -e boot
 ```
 
 期间如下例，会有大量Unrecognised问题，不需要理会  
