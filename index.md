@@ -11,6 +11,8 @@
 
 # 目录
 ## 2026
+### 202602
+[给MEMini飞牛联名款开启风扇控制功能](2026/02/03160420_add_fan_control_for_memini/index.md)
 ### 202601
 [使用飞牛OS的fn connect访问家中网络](2026/01/061708_use_fnconnect_proxy/index.md)
 ## 2025
