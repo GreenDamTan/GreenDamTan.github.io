@@ -298,25 +298,37 @@ LABEL linux
   MENU LABEL FNOS Live [BIOS/ISOLINUX]
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live pci=nomsi pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
   
 LABEL linux
   MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX]
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
+  
+LABEL linux
+  MENU LABEL FNOS Live DEBUG nomsi [BIOS/ISOLINUX]
+  MENU DEFAULT
+  KERNEL /live/vmlinuz-6.12.18-trim
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic pci=nomsi spectre_v2=off
   
 LABEL linux toram
   MENU LABEL FNOS Live [BIOS/ISOLINUX] (toram)
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pci=nomsi pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
   
 LABEL linux toram
   MENU LABEL FNOS Live DEBUG [BIOS/ISOLINUX] (toram)
   MENU DEFAULT
   KERNEL /live/vmlinuz-6.12.18-trim
-  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
+  
+LABEL linux toram
+  MENU LABEL FNOS Live DEBUG nomsi [BIOS/ISOLINUX] (toram)
+  MENU DEFAULT
+  KERNEL /live/vmlinuz-6.12.18-trim
+  APPEND initrd=/live/initrd.img-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic pci=nomsi spectre_v2=off
 EOF
 ```
 
@@ -343,28 +355,42 @@ search --file --set=root /live/filesystem.squashfs
 
 menuentry "FNOS Live" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live pci=nomsi pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live Verbose" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
+    echo 'Loading initrd'
+    initrd ($root)/live/initrd.img-6.12.18-trim
+}
+
+menuentry "FNOS Live Verbose nomsi" {
+    echo 'Loading vmlinuz'
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic pci=nomsi spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live toRam" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs pci=nomsi pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim quiet splash boot=live toram=filesystem.squashfs intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
 
 menuentry "FNOS Live toRam Verbose" {
     echo 'Loading vmlinuz'
-    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 pci=nomsi pcie_aspm=off spectre_v2=off
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic spectre_v2=off
+    echo 'Loading initrd'
+    initrd ($root)/live/initrd.img-6.12.18-trim
+}
+
+menuentry "FNOS Live toRam Verbose nomsi" {
+    echo 'Loading vmlinuz'
+    linux ($root)/live/vmlinuz-6.12.18-trim boot=live debug=1 toram=filesystem.squashfs console=tty0 console=ttyS0,115200 intremap=off amd_iommu_intr=legacy net.ifnames=0 panic=5 split_lock_detect=off pcie_aspm=off intel_pstate=disable amd_pstate=disable nox2apic pci=nomsi spectre_v2=off
     echo 'Loading initrd'
     initrd ($root)/live/initrd.img-6.12.18-trim
 }
