@@ -11,6 +11,8 @@
 
 # 目录
 ## 2026
+### 202603
+[在飞牛OS部署MCP服务拉取系统日志](2026/03/062311_mcp_in_fnos/index.md)
 ### 202602
 [给MEMini飞牛联名款开启风扇控制功能](2026/02/03160420_add_fan_control_for_memini/index.md)
 ### 202601
