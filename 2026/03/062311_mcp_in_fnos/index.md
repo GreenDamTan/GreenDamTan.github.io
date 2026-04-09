@@ -12,6 +12,8 @@
 
 <summary>被折叠的代码</summary>
 
+{% raw %}
+
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -641,6 +643,8 @@ if __name__ == '__main__':
 
 ```
 
+{% endraw %}
+
 </details>
 # 部署
 将代码复制到任意可执行目录中，这里文件名为：
@@ -648,6 +652,9 @@ if __name__ == '__main__':
 `report-trimrpc-mcp-202603062124.py`
 
 直接运行即可：
+
+{% raw %}
+
 ```text
 Linux fnos 6.12.18-trim #211 SMP PREEMPT_DYNAMIC Fri Jan 30 17:47:53 CST 2026 x86_64
 Last login: Fri Mar  6 23:21:46 2026 from 192.168.2.12
@@ -660,6 +667,9 @@ trimrpc MCP Server 已启动
   MCP 配置: {"mcpServers": {"fnos": {"url": "http://<IP>:9800/mcp"}}}
 
 ```
+
+{% endraw %}
+
 启动后，一个简单的 MCP HTTP 服务就已经运行，并对外提供三个工具接口：
 
 get_system_logs：获取系统日志  
