@@ -12,6 +12,7 @@
 # 目录
 ## 2026
 ### 202606
+[将redroid容器封装为飞牛应用中心应用](2026/06/151154_pack_redroid_fpk/index.md)
 [在QEMU 11里把Intel HAXM加速器捡回来](2026/06/111946_restore_haxm_in_qemu11/index.md)
 ### 202604
 [普通用户使用飞牛虚拟机](2026/04/011933_trim_vm_normal_user/index.md)
