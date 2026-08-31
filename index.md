@@ -11,6 +11,10 @@
 
 # 目录
 ## 2026
+### 202608
+[在arm64版本的飞牛系统使用binfmt运行x86架构容器](2026/08/312018_x86_docker_in_fnos_arm64/index.md)
+### 202607
+[飞牛加密备份 FOT 文件解密记录](2026/07/291951_fot_container_recovery/index.md)
 ### 202606
 [将redroid容器封装为飞牛应用中心应用](2026/06/151154_pack_redroid_fpk/index.md)  
 [在QEMU 11里把Intel HAXM加速器捡回来](2026/06/111946_restore_haxm_in_qemu11/index.md)
