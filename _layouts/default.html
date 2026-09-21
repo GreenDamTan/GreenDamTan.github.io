@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% if page.title %}
+        {{ page.title }} -
+        {% endif %}
+        {{ site.title | default: "GreenDamTan" }}
+    </title>
+
+    <meta
+            name="description"
+            content="{{ page.description | default: site.description | default: 'GreenDamTan 的个人博客' | escape }}"
+    >
+
+    <meta
+            name="author"
+            content="GreenDamTan"
+    >
+
+
+    <style>
+
+        /* =========================================================
+           基础
+           ========================================================= */
+
+        :root {
+            color-scheme: light dark;
+
+            --page-width: 1200px;
+            --article-width: 900px;
+            --toc-width: 260px;
+            --layout-gap: 48px;
+
+            --text-color: CanvasText;
+            --muted-color: GrayText;
+
+            --border-color:
+                    rgba(127, 127, 127, 0.25);
+
+            --hover-color:
+                    rgba(127, 127, 127, 0.10);
+
+            --code-background:
+                    rgba(127, 127, 127, 0.12);
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+            padding: 0;
+
+            background: Canvas;
+            color: var(--text-color);
+
+            font-family:
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    "Noto Sans SC",
+                    "Microsoft YaHei",
+                    sans-serif;
+
+            line-height: 1.7;
+        }
+
+
+        a {
+            color: inherit;
+        }
+
+
+        /* =========================================================
+           页面布局
+           ========================================================= */
+
+        .page-layout {
+
+            width:
+                    min(
+                            calc(100% - 40px),
+                            var(--page-width)
+                    );
+
+            margin: 0 auto;
+
+            display: grid;
+
+            grid-template-columns:
+                var(--toc-width)
+                minmax(0, var(--article-width));
+
+            gap: var(--layout-gap);
+
+            padding-top: 48px;
+            padding-bottom: 80px;
+        }
+
+
+        /* =========================================================
+           左侧目录
+           ========================================================= */
+
+        .toc {
+
+            position: sticky;
+
+            top: 32px;
+
+            align-self: start;
+
+            width: var(--toc-width);
+
+            max-height:
+                    calc(100vh - 64px);
+
+            overflow-y: auto;
+
+            scrollbar-width: thin;
+        }
+
+
+        .toc-title {
+
+            margin-bottom: 12px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: var(--text-color);
+        }
+
+
+        /*
+         * 目录所有 ul 都不使用浏览器默认缩进。
+         *
+         * 真正的层级由 .toc-level-N 控制。
+         */
+
+        .toc-list,
+        .toc-list ul {
+
+            margin: 0;
+            padding: 0;
+
+            list-style: none;
+        }
+
+
+        /*
+         * 每一级目录固定增加缩进。
+         *
+         * 这里不是靠 heading 的 h1/h2/h3
+         * 直接设置 padding，而是由 JS 构建
+         * 真正的嵌套 UL。
+         */
+
+        .toc-list ul {
+
+            margin-left: 16px;
+        }
+
+
+        .toc-list li {
+
+            margin: 1px 0;
+            padding: 0;
+        }
+
+
+        .toc-list a {
+
+            display: block;
+
+            padding:
+                    3px 8px;
+
+            color: var(--muted-color);
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            text-decoration: none;
+
+            border-left:
+                    2px solid transparent;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            transition:
+                    color 0.15s ease,
+                    background-color 0.15s ease,
+                    border-color 0.15s ease;
+        }
+
+
+        .toc-list a:hover {
+
+            color: var(--text-color);
+
+            background:
+                    var(--hover-color);
+        }
+
+
+        .toc-list a.active {
+
+            color: var(--text-color);
+
+            border-left-color:
+                    currentColor;
+        }
+
+
+        /*
+         * 不同层级可以稍微调整字体。
+         *
+         * 一级标题最明显。
+         * 越往下越小。
+         */
+
+        .toc-level-1 > a {
+            font-weight: 600;
+        }
+
+
+        .toc-level-2 > a {
+            font-weight: 400;
+        }
+
+
+        .toc-level-3 > a,
+        .toc-level-4 > a,
+        .toc-level-5 > a,
+        .toc-level-6 > a {
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           Markdown 正文
+           ========================================================= */
+
+        .article {
+
+            min-width: 0;
+
+            overflow-wrap: break-word;
+
+            word-wrap: break-word;
+        }
+
+
+        /*
+         * 防止点击目录之后标题被顶部区域遮住。
+         */
+
+        .article h1,
+        .article h2,
+        .article h3,
+        .article h4,
+        .article h5,
+        .article h6 {
+
+            scroll-margin-top: 32px;
+        }
+
+
+        /*
+         * 显示 Markdown 标题标记，
+         * 仅作为视觉装饰，不会进入标题文本或目录。
+         */
+
+        .article > h1::before,
+        .article > h2::before,
+        .article > h3::before,
+        .article > h4::before,
+        .article > h5::before,
+        .article > h6::before {
+
+            margin-right: 0.45em;
+
+            color: var(--muted-color);
+
+            opacity: 0.5;
+
+            font-family:
+                    ui-monospace,
+                    SFMono-Regular,
+                    Menlo,
+                    Monaco,
+                    Consolas,
+                    "Liberation Mono",
+                    monospace;
+
+            font-weight: 400;
+        }
+
+
+        .article > h1::before {
+            content: "#";
+        }
+
+
+        .article > h2::before {
+            content: "##";
+        }
+
+
+        .article > h3::before {
+            content: "###";
+        }
+
+
+        .article > h4::before {
+            content: "####";
+        }
+
+
+        .article > h5::before {
+            content: "#####";
+        }
+
+
+        .article > h6::before {
+            content: "######";
+        }
+
+
+        /* =========================================================
+           图片
+           ========================================================= */
+
+        .article img {
+
+            display: block;
+
+            max-width: 100%;
+
+            height: auto;
+
+            margin:
+                    1.5em auto;
+        }
+
+
+        /* =========================================================
+           代码
+           ========================================================= */
+
+        .article code {
+
+            font-family:
+                    ui-monospace,
+                    SFMono-Regular,
+                    Menlo,
+                    Monaco,
+                    Consolas,
+                    "Liberation Mono",
+                    monospace;
+
+            font-size: 0.9em;
+        }
+
+
+        .article :not(pre) > code {
+
+            padding:
+                    0.15em
+                    0.35em;
+
+            border-radius: 4px;
+
+            background:
+                    var(--code-background);
+        }
+
+
+        .article pre {
+
+            max-width: 100%;
+
+            overflow-x: auto;
+
+            padding: 1em;
+
+            border-radius: 8px;
+
+            background:
+                    var(--code-background);
+
+            line-height: 1.5;
+        }
+
+
+        .article pre code {
+
+            padding: 0;
+
+            background: transparent;
+        }
+
+
+        /* =========================================================
+           引用
+           ========================================================= */
+
+        .article blockquote {
+
+            margin:
+                    1.5em 0;
+
+            padding:
+                    0.5em 1em;
+
+            border-left:
+                    4px solid
+                    var(--border-color);
+
+            color:
+                    var(--muted-color);
+        }
+
+
+        /* =========================================================
+           表格
+           ========================================================= */
+
+        .article table {
+
+            display: block;
+
+            max-width: 100%;
+
+            overflow-x: auto;
+
+            border-collapse: collapse;
+        }
+
+
+        .article th,
+        .article td {
+
+            padding:
+                    8px 12px;
+
+            border:
+                    1px solid
+                    var(--border-color);
+        }
+
+
+        /* =========================================================
+           水平线
+           ========================================================= */
+
+        .article hr {
+
+            margin:
+                    2em 0;
+
+            border: 0;
+
+            border-top:
+                    1px solid
+                    var(--border-color);
+        }
+
+
+        /* =========================================================
+           评论区
+           ========================================================= */
+
+        .comments {
+
+            margin-top: 64px;
+
+            padding-top: 32px;
+
+            border-top:
+                    1px solid
+                    var(--border-color);
+        }
+
+
+        /* =========================================================
+           手机端
+           ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .page-layout {
+
+                display: block;
+
+                width:
+                        calc(100% - 20px);
+
+                padding-top: 24px;
+
+                padding-bottom: 48px;
+            }
+
+
+            .toc {
+
+                display: none;
+            }
+        }
+
+
+        /* =========================================================
+           小屏幕
+           ========================================================= */
+
+        @media (max-width: 600px) {
+
+            .article {
+
+                font-size: 15px;
+            }
+
+
+            .article pre {
+
+                margin-left: -5px;
+
+                margin-right: -5px;
+
+                border-radius: 6px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<div class="page-layout">
+
+
+    <!-- =========================================================
+         左侧目录
+         ========================================================= -->
+
+    <aside
+            id="toc-container"
+            class="toc"
+    >
+
+        <div class="toc-title">
+            目录
+        </div>
+
+
+        <nav
+                aria-label="文章目录"
+        >
+
+            <ul
+                    id="toc-list"
+                    class="toc-list"
+            ></ul>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================================================
+         正文
+         ========================================================= -->
+
+    <main>
+
+        <article
+                id="article"
+                class="article"
+        >
+
+            {{ content }}
+
+        </article>
+
+
+        <!-- =====================================================
+             Giscus
+             ===================================================== -->
+
+        <section
+                class="comments"
+                aria-label="Comments"
+        >
+
+            {% include giscus.html %}
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+    (function () {
+
+        "use strict";
+
+
+        /* =========================================================
+           获取元素
+           ========================================================= */
+
+        const article =
+            document.getElementById("article");
+
+        const tocContainer =
+            document.getElementById("toc-container");
+
+        const tocList =
+            document.getElementById("toc-list");
+
+
+        if (
+            !article ||
+            !tocContainer ||
+            !tocList
+        ) {
+
+            return;
+        }
+
+
+        /* =========================================================
+           获取所有标题
+
+           支持完整 Markdown 的：
+
+           H1
+           H2
+           H3
+           H4
+           H5
+           H6
+           ========================================================= */
+
+        const allHeadings =
+            Array.from(
+                article.querySelectorAll(
+                    ":scope > h1, :scope > h2, :scope > h3, " +
+                    ":scope > h4, :scope > h5, :scope > h6"
+                )
+            );
+
+
+        if (
+            allHeadings.length === 0
+        ) {
+
+            tocContainer.style.display =
+                "none";
+
+            return;
+        }
+
+
+        /* =========================================================
+           第一个 H1 = 文章标题
+
+           例如：
+
+           # 飞牛加密备份 FOT 文件解密记录
+
+           # 前言
+           # 大概解密流程
+           # FOT 文件结构
+           ## metadata
+
+           第一个 H1 不进入目录。
+
+           后面的 H1 是目录一级。
+           ========================================================= */
+
+        let firstH1Found = false;
+
+
+        const headings = [];
+
+
+        allHeadings.forEach(
+            function (heading) {
+
+                if (
+                    heading.tagName === "H1" &&
+                    !firstH1Found
+                ) {
+
+                    firstH1Found = true;
+
+                    return;
+                }
+
+
+                headings.push(heading);
+
+            }
+        );
+
+
+        if (
+            headings.length === 0
+        ) {
+
+            tocContainer.style.display =
+                "none";
+
+            return;
+        }
+
+
+        /* =========================================================
+           创建真正的嵌套目录树
+
+           例如：
+
+           H1
+           H2
+           H3
+           H3
+           H2
+           H1
+
+           会变成：
+
+           <ul>
+               <li>
+                   H1
+                   <ul>
+                       <li>
+                           H2
+                           <ul>
+                               <li>H3</li>
+                               <li>H3</li>
+                           </ul>
+                       </li>
+                       <li>H2</li>
+                   </ul>
+               </li>
+
+               <li>
+                   H1
+               </li>
+           </ul>
+           ========================================================= */
+
+
+        /*
+         * stack 保存当前正在打开的目录层级。
+         *
+         * stack[0] = H1
+         * stack[1] = H2
+         * stack[2] = H3
+         * ...
+         */
+
+        const stack = [];
+
+
+        /*
+         * 当前层级的 UL。
+         *
+         * rootUl 是最外层。
+         */
+
+        const rootUl = tocList;
+
+
+        headings.forEach(
+            function (heading) {
+
+                const level =
+                    Number(
+                        heading.tagName.substring(1)
+                    );
+
+
+                /*
+                 * Jekyll 已经生成 ID。
+                 *
+                 * 例如：
+
+                 * <h2 id="metadata">
+                 *
+                 * 我们直接使用 metadata。
+                 */
+
+                if (!heading.id) {
+
+                    console.warn(
+                        "TOC: heading has no id:",
+                        heading.textContent
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * 如果标题层级下降，
+                 * 回退 stack。
+                 *
+                 * 例如：
+
+                 * H3
+                 * H3
+                 * H2
+                 *
+                 * 第二个 H3 完成后，
+                 * H2 应该回到 H2 层。
+                 */
+
+                while (
+                    stack.length >= level
+                    ) {
+
+                    stack.pop();
+
+                }
+
+
+                /*
+                 * 如果这是新的更深层级，
+                 * 找到父级 LI。
+                 */
+
+                let parentUl;
+
+
+                if (
+                    stack.length === 0
+                ) {
+
+                    /*
+                     * 没有父级：
+                     *
+                     * H1
+                     *
+                     * 放到最外层。
+                     */
+
+                    parentUl =
+                        rootUl;
+
+                } else {
+
+                    /*
+                     * 有父级：
+                     *
+                     * H1
+                     *   └── H2
+                     *
+                     * 找到上一级 LI，
+                     * 在里面创建 UL。
+                     */
+
+                    const parentLi =
+                        stack[
+                        stack.length - 1
+                            ];
+
+
+                    /*
+                     * 查找这个 LI 里面
+                     * 是否已经存在子 UL。
+                     */
+
+                    parentUl =
+                        parentLi.querySelector(
+                            ":scope > ul"
+                        );
+
+
+                    if (!parentUl) {
+
+                        parentUl =
+                            document.createElement(
+                                "ul"
+                            );
+
+
+                        parentLi.appendChild(
+                            parentUl
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * 创建当前 LI。
+                 */
+
+                const li =
+                    document.createElement(
+                        "li"
+                    );
+
+
+                li.className =
+                    "toc-level-" + level;
+
+
+                /*
+                 * 创建链接。
+                 */
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.href =
+                    "#" + heading.id;
+
+
+                link.textContent =
+                    heading.textContent.trim();
+
+
+                /*
+                 * 保存 heading 引用。
+                 */
+
+                link.__heading =
+                    heading;
+
+
+                /*
+                 * 点击目录。
+                 */
+
+                link.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+
+                        heading.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+
+                        /*
+                         * 更新 URL hash。
+                         */
+
+                        history.replaceState(
+                            null,
+                            "",
+                            "#" + heading.id
+                        );
+
+                    }
+                );
+
+
+                li.appendChild(
+                    link
+                );
+
+
+                parentUl.appendChild(
+                    li
+                );
+
+
+                /*
+                 * 当前 LI 成为下一层的父级。
+                 */
+
+                stack.push(
+                    li
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           获取所有目录链接
+           ========================================================= */
+
+        const links =
+            Array.from(
+                tocList.querySelectorAll(
+                    "a"
+                )
+            );
+
+
+        if (
+            links.length === 0
+        ) {
+
+            tocContainer.style.display =
+                "none";
+
+            return;
+        }
+
+
+        /* =========================================================
+           当前章节高亮
+           ========================================================= */
+
+        function updateActiveHeading() {
+
+            const offset = 120;
+
+
+            let current = null;
+
+
+            /*
+             * 找到当前已经进入视口顶部区域
+             * 的最后一个标题。
+             */
+
+            for (
+                let i = 0;
+                i < links.length;
+                i++
+            ) {
+
+                const heading =
+                    links[i].__heading;
+
+
+                const rect =
+                    heading.getBoundingClientRect();
+
+
+                if (
+                    rect.top <= offset
+                ) {
+
+                    current =
+                        heading;
+
+                }
+
+            }
+
+
+            /*
+             * 清除旧的 active。
+             */
+
+            links.forEach(
+                function (link) {
+
+                    link.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            if (!current) {
+                return;
+            }
+
+
+            /*
+             * 找到当前标题对应的链接。
+             */
+
+            const activeLink =
+                links.find(
+                    function (link) {
+
+                        return (
+                            link.__heading ===
+                            current
+                        );
+
+                    }
+                );
+
+
+            if (!activeLink) {
+                return;
+            }
+
+
+            activeLink.classList.add(
+                "active"
+            );
+
+
+            /*
+             * 如果当前目录项滚出目录可视区域，
+             * 自动滚回来。
+             */
+
+            const tocRect =
+                tocContainer.getBoundingClientRect();
+
+
+            const linkRect =
+                activeLink.getBoundingClientRect();
+
+
+            if (
+                linkRect.top <
+                tocRect.top
+                ||
+                linkRect.bottom >
+                tocRect.bottom
+            ) {
+
+                activeLink.scrollIntoView({
+                    block: "nearest"
+                });
+
+            }
+
+        }
+
+
+        /* =========================================================
+           滚动监听
+           ========================================================= */
+
+        let ticking = false;
+
+
+        window.addEventListener(
+            "scroll",
+            function () {
+
+                if (ticking) {
+                    return;
+                }
+
+
+                ticking = true;
+
+
+                window.requestAnimationFrame(
+                    function () {
+
+                        updateActiveHeading();
+
+                        ticking = false;
+
+                    }
+                );
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        /* =========================================================
+           初始化
+           ========================================================= */
+
+        updateActiveHeading();
+
+
+        /* =========================================================
+           页面从 #xxx 进入时
+           ========================================================= */
+
+        if (
+            window.location.hash
+        ) {
+
+            setTimeout(
+                function () {
+
+                    updateActiveHeading();
+
+                },
+                100
+            );
+
+        }
+
+    })();
+
+</script>
+
+</body>
+</html>
