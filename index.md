@@ -11,6 +11,8 @@
 
 # 目录
 ## 2026
+### 202610
+[使用Strata部署180B大模型Qwen3.8-Flash-Next](2026/10/161140_qwen_strata/index.md)
 ### 202609
 [在飞牛nas使用tcm_loop加载持久化虚拟磁盘](2026/09/301812_tcm_loop/index.md)
 ### 202608
